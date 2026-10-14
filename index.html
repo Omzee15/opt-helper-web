@@ -260,7 +260,8 @@
           <li>
             <strong>Allow it the first time</strong>
             <p>Open OptHelper, close the warning, then go to System Settings › Privacy &amp; Security and click <em>Open Anyway</em>. Or paste this into Terminal instead:</p>
-            <div class="cmd"><code id="xattr">xattr -dr com.apple.quarantine /Applications/OptHelper.app</code><button class="copy" type="button" data-copy="xattr">Copy</button></div>
+            <div class="cmd"><code id="xattr">sudo xattr -rd com.apple.quarantine /Applications/OptHelper.app</code><button class="copy" type="button" data-copy="xattr">Copy</button></div>
+            <p>It asks for your Mac password. If it says <em>Operation not permitted</em>, turn on Terminal under System Settings › Privacy &amp; Security › App Management, restart Terminal and run it again.</p>
           </li>
           <li>
             <strong>Grant permissions once</strong>
