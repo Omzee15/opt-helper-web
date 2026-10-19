@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-app-live="false">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -92,6 +92,128 @@
   .cta small { color: var(--muted); font-size: 13.5px; }
   .release { color: var(--muted); font-size: 13.5px; min-height: 1.55em; margin: 0; }
   .release .ver { color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+  /* APP_LIVE (see netlify/edge-functions/app-live.js) picks between the download and the waitlist. */
+  [hidden] { display: none !important; }
+  [data-app-live="false"] .live-only, [data-app-live="true"] .waitlist-only { display: none !important; }
+  .btn { border: 0; cursor: pointer; font-family: inherit; }
+  .waitlist { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; }
+  .waitlist form { display: flex; gap: 8px; width: min(440px, 100%); }
+  .waitlist input[type="email"] {
+    flex: 1; min-width: 0;
+    background: var(--surface); color: var(--text);
+    border: 1px solid var(--line); border-radius: 999px;
+    padding: 14px 20px; font: inherit; font-size: 16px;
+  }
+  .waitlist input[type="email"]:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: transparent; }
+  .waitlist form .btn { padding: 14px 22px; }
+  .waitlist .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+  .wl-msg { color: var(--muted); font-size: 14px; margin: 0; min-height: 1.55em; }
+  .wl-msg.ok { color: var(--text); font-weight: 600; }
+
+  .cta-row { display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 10px 12px; }
+  .cta-row .waitlist { width: auto; }
+  /* Once someone has joined, the thank-you takes the whole line and Try OptHelper moves below it. */
+  .cta-row .waitlist.done { flex-basis: 100%; }
+  .cta-row .waitlist form { width: min(440px, calc(100vw - 32px)); }
+  .btn.ghost { background: var(--surface); color: var(--text); border: 1px solid var(--line); box-shadow: none; }
+  .btn.ghost:hover { border-color: var(--muted); filter: none; }
+  .linkish { background: none; border: 0; padding: 0; font: inherit; color: var(--text); text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
+
+  /* "Try OptHelper": the Mac below the hero turns into a small working screen. */
+  .mac { position: relative; scroll-margin-top: 24px; }
+  .screen { container-type: inline-size; }
+  .island-clip { position: relative; transition: clip-path .38s cubic-bezier(.3, 1.3, .5, 1); }
+  .is-demo .island-clip { clip-path: inset(0 41.9% 87.4% 41.9% round 0 0 1.3cqw 1.3cqw); }
+  .is-demo.notch-open .island-clip { clip-path: inset(0 0 0 0 round 0 0 2.6cqw 2.6cqw); }
+  .is-demo .screen { touch-action: manipulation; }
+  .shelf-items {
+    position: absolute; left: 68.6%; top: 33.4%; width: 28.9%; height: 55.6%;
+    background: #000; border: 1px dashed rgba(255,255,255,.28); border-radius: 1cqw;
+    display: flex; align-items: center; justify-content: center; gap: 1.2cqw; padding: .8cqw; overflow: hidden;
+  }
+  .shelf-items .file { pointer-events: none; }
+  .shelf-items .file .t { width: max(14px, 3.6cqw); }
+  .shelf-items .file .n { font-size: max(6px, .85cqw); }
+  /* Above the desktop icons; only the visible (clipped) part takes clicks. */
+  .is-demo .island { z-index: 2; pointer-events: none; }
+  .is-demo .island-clip { pointer-events: auto; }
+  .desk {
+    position: absolute; top: 7.5cqw; right: 1.2cqw; bottom: 1cqw;
+    display: none; grid-template-rows: repeat(5, 9.4cqw); grid-auto-columns: 10.5cqw;
+    direction: rtl; user-select: none; -webkit-user-select: none;
+  }
+  .is-demo .desk { display: grid; }
+  .file {
+    direction: ltr; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; align-self: start; gap: .45cqw;
+    background: none; border: 0; padding: .4cqw .2cqw; margin: 0; color: #fff; font: inherit; cursor: default; min-width: 0;
+  }
+  .file .t { position: relative; width: max(22px, 5.6cqw); aspect-ratio: 4 / 3; border-radius: 3px; box-shadow: 0 1px 3px rgba(0,0,0,.4); }
+  .file .n {
+    font-size: max(8px, 1.1cqw); font-weight: 600; line-height: 1.25; padding: .1cqw .5cqw; border-radius: .5cqw;
+    max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-shadow: 0 1px 2px rgba(0,0,0,.55);
+  }
+  .file.on .t { outline: max(2px, .25cqw) solid rgba(255,255,255,.45); outline-offset: max(2px, .25cqw); }
+  .file.on .n { background: #2f6fdc; text-shadow: none; }
+  .file.pop { animation: file-pop .45s cubic-bezier(.3, 1.5, .5, 1); }
+  @keyframes file-pop { from { transform: scale(.4); opacity: 0; } to { transform: none; opacity: 1; } }
+  .t.img { border: max(1.5px, .2cqw) solid #fff; background:
+    radial-gradient(circle at 50% 66%, #ffe08a 0 15%, transparent 16%),
+    linear-gradient(transparent 64%, #3b2a4a 64% 70%, #241a35 70%),
+    linear-gradient(#ffb36b, #e0694a 45%, #8a3d5c); }
+  .t.gray { filter: grayscale(1); }
+  .t.small { transform: scale(.72); }
+  .t.pdf { background: #fff; border-radius: 2px; aspect-ratio: 3 / 4; width: max(17px, 4.3cqw); }
+  .t.pdf::before { content: ""; position: absolute; inset: 14% 12% 34%; background:
+    radial-gradient(circle at 50% 66%, #ffe08a 0 15%, transparent 16%), linear-gradient(#ffb36b, #e0694a 50%, #8a3d5c); }
+  .t.pdf::after { content: "PDF"; position: absolute; left: 0; right: 0; bottom: 8%; text-align: center; color: #d0302b; font-size: max(5px, .8cqw); font-weight: 800; }
+  .t.zip { background: linear-gradient(90deg, transparent 44%, #6b6b72 44% 56%, transparent 56%), linear-gradient(#d9d9de, #b9b9c0); aspect-ratio: 1; width: max(18px, 4.4cqw); }
+  .t.zip::after { content: ""; position: absolute; left: 38%; right: 38%; top: 46%; height: 18%; border-radius: 2px; background: #4a4a50; }
+
+  .pop { position: absolute; inset: 0; pointer-events: none; z-index: 5; }
+  .pop > * { pointer-events: auto; }
+  .wheel {
+    position: absolute; --wd: min(276px, 78vw); width: var(--wd); height: var(--wd);
+    transform: translate(-50%, -50%); animation: wheel-in .2s cubic-bezier(.3, 1.4, .5, 1);
+    touch-action: none; user-select: none; -webkit-user-select: none; filter: drop-shadow(0 18px 30px rgba(0,0,0,.4));
+  }
+  .wheel svg { display: block; width: 100%; height: 100%; font-family: -apple-system, BlinkMacSystemFont, system-ui, sans-serif; }
+  @keyframes wheel-in { from { transform: translate(-50%, -50%) scale(.7); opacity: 0; } }
+  .wlist {
+    position: absolute; width: 268px; padding: 9px; border-radius: 14px; color: #fff;
+    background: rgba(28,28,32,.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,.12); box-shadow: 0 24px 50px -20px rgba(0,0,0,.6);
+    transform-origin: top center; animation: list-in .2s cubic-bezier(.3, 1.3, .5, 1);
+    user-select: none; -webkit-user-select: none; touch-action: none;
+  }
+  @keyframes list-in { from { transform: scale(.8); opacity: 0; } }
+  .wlist .hd { height: 50px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; cursor: pointer; }
+  .wlist .hd b { font-size: 13px; }
+  .wlist .hd span { font-size: 9.5px; color: rgba(255,255,255,.6); }
+  .wlist .hd em { font-style: normal; font-size: 9.5px; color: rgba(255,255,255,.5); font-weight: 600; }
+  .wlist .row { height: 28px; display: flex; align-items: center; gap: 10px; padding: 0 10px; border-radius: 7px; font-size: 13px; font-weight: 500; cursor: pointer; }
+  .wlist .row svg { width: 15px; height: 15px; flex: none; }
+  .wlist .row.on { background: rgba(47,124,246,.88); }
+  .toast {
+    position: absolute; transform: translateX(-50%); white-space: nowrap; max-width: 92%; overflow: hidden; text-overflow: ellipsis;
+    display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px;
+    background: rgba(0,0,0,.84); color: #fff; font-size: 12.5px; font-weight: 550; box-shadow: 0 10px 24px -10px rgba(0,0,0,.6);
+    pointer-events: none !important; animation: toast-in .18s ease-out;
+  }
+  @keyframes toast-in { from { opacity: 0; transform: translate(-50%, -4px); } }
+  .toast svg { width: 15px; height: 15px; flex: none; }
+  .toast .spin { width: 13px; height: 13px; flex: none; border-radius: 50%; border: 2px solid rgba(255,255,255,.3); border-top-color: #fff; animation: spin .7s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .demo-bar { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 18px; text-align: center; }
+  .demo-hint { margin: 0; font-size: 15px; font-weight: 550; min-height: 1.55em; }
+  .demo-keys { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+  .key {
+    border: 1px solid var(--line); border-bottom-width: 3px; background: var(--surface); color: var(--text);
+    border-radius: 9px; padding: 7px 13px; font: 600 13.5px/1.2 inherit; font-family: inherit; cursor: pointer;
+  }
+  .key:hover { border-color: var(--muted); }
+  .key.subtle { border-bottom-width: 1px; color: var(--muted); }
 
   /* The Mac: a screen with a menu bar and the island hanging from the notch. */
   .mac { margin: 8px auto 0; max-width: 980px; }
@@ -204,7 +326,10 @@
     ol.steps li { padding-left: 56px; }
     ol.steps li::before { left: 14px; }
   }
-  @media (prefers-reduced-motion: reduce) { .btn { transition: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    .btn, .island-clip { transition: none; }
+    .wheel, .wlist, .toast, .file.pop { animation: none; }
+  }
 </style>
 </head>
 <body>
@@ -220,26 +345,54 @@
         <h1>Your Mac's notch, put to work.</h1>
         <p class="lede">Hover the notch and it opens into a little island: what's playing on a spinning record, a shelf for files you're moving around, and a launcher that understands plain words.</p>
         <div class="cta">
-          <a class="btn" href="releases/OptHelper.dmg" download>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/></svg>
-            Download for Mac
-          </a>
+          <div class="cta-row">
+            <a class="btn live-only" href="releases/OptHelper.dmg" download>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/></svg>
+              Download for Mac
+            </a>
+            <div class="waitlist waitlist-only" data-waitlist>
+              <button class="btn" type="button" data-waitlist-open>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg>
+                Join Waitlist
+              </button>
+              <form hidden>
+                <input type="email" name="email" required autocomplete="email" placeholder="you@example.com" aria-label="Email address">
+                <input class="hp" type="text" name="company" tabindex="-1" autocomplete="off" aria-hidden="true">
+                <button class="btn" type="submit">Join</button>
+              </form>
+              <p class="wl-msg" data-waitlist-msg aria-live="polite"></p>
+            </div>
+            <button class="btn ghost" type="button" data-try>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v15l4-4 3 7 3-1.4-3-6.8h6z"/></svg>
+              Try OptHelper
+            </button>
+          </div>
           <small>Free · macOS 13 or later · Apple Silicon &amp; Intel</small>
-          <p class="release" data-release aria-live="polite"></p>
+          <p class="release live-only" data-release aria-live="polite"></p>
         </div>
       </div>
 
-      <div class="mac" role="img" aria-label="OptHelper open beneath the notch of a MacBook, showing a turntable with the current song, playback controls and the file shelf">
+      <div class="mac" id="mac" data-mac role="img" aria-label="OptHelper open beneath the notch of a MacBook, showing a turntable with the current song, playback controls and the file shelf">
         <div class="screen">
           <div class="menubar" aria-hidden="true">
             <div class="left"><b>Finder</b><span>File</span><span>Edit</span><span>View</span></div>
             <div class="right"><span>⌥ Space</span><span>Wi‑Fi</span><span>Thu 9:41</span></div>
           </div>
-          <div class="island"><img src="assets/notch.png" alt="" width="1438" height="366"></div>
+          <div class="island" data-island><div class="island-clip"><img src="assets/notch.png" alt="" width="1438" height="366"><div class="shelf-items" data-shelf hidden></div></div></div>
+          <div class="desk" data-desk></div>
         </div>
         <div class="base" aria-hidden="true"></div>
+        <div class="pop" data-pop></div>
       </div>
-      <p class="caption">The island, as it opens from the notch.</p>
+      <p class="caption" data-caption>The island, as it opens from the notch. <button class="linkish" type="button" data-try>Try it yourself</button></p>
+      <div class="demo-bar" data-demo-bar hidden>
+        <p class="demo-hint" data-hint aria-live="polite"></p>
+        <div class="demo-keys">
+          <button class="key" type="button" data-key-wheel>⌥ Smart Wheel</button>
+          <button class="key" type="button" data-key-page>⌥` Next page</button>
+          <button class="key subtle" type="button" data-exit>Exit demo</button>
+        </div>
+      </div>
 
       <section id="demo" class="demo">
         <h2>See it in 85 seconds.</h2>
@@ -287,7 +440,7 @@
         </div>
       </section>
 
-      <section id="install">
+      <section id="install" class="live-only">
         <h2>Install in a minute.</h2>
         <p class="section-lede">OptHelper isn't notarized by Apple yet, so macOS asks you to confirm it once. After that it opens like any other app.</p>
         <ol class="steps">
@@ -320,11 +473,23 @@
 
       <div class="final">
         <h2>Give your notch a job.</h2>
-        <a class="btn" href="releases/OptHelper.dmg" download>
+        <a class="btn live-only" href="releases/OptHelper.dmg" download>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/></svg>
           Download OptHelper
         </a>
-        <p class="release" data-release style="margin-top:12px"></p>
+        <p class="release live-only" data-release style="margin-top:12px"></p>
+        <div class="waitlist waitlist-only" data-waitlist>
+          <button class="btn" type="button" data-waitlist-open>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg>
+            Join Waitlist
+          </button>
+          <form hidden>
+            <input type="email" name="email" required autocomplete="email" placeholder="you@example.com" aria-label="Email address">
+            <input class="hp" type="text" name="company" tabindex="-1" autocomplete="off" aria-hidden="true">
+            <button class="btn" type="submit">Join</button>
+          </form>
+          <p class="wl-msg" data-waitlist-msg aria-live="polite"></p>
+        </div>
       </div>
     </main>
 
@@ -351,6 +516,460 @@
       });
     })
     .catch(function () {});
+
+  // Join Waitlist opens an email field; the address goes to netlify/functions/waitlist.mjs, which saves it in Netlify Blobs.
+  document.querySelectorAll('[data-waitlist]').forEach(function (box) {
+    var open = box.querySelector('[data-waitlist-open]'), form = box.querySelector('form'), msg = box.querySelector('[data-waitlist-msg]');
+    var submit = form.querySelector('[type="submit"]');
+    open.addEventListener('click', function () {
+      open.hidden = true;
+      form.hidden = false;
+      form.email.focus();
+    });
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      submit.disabled = true;
+      msg.className = 'wl-msg';
+      msg.textContent = 'Adding you…';
+      fetch('/api/waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: form.email.value, company: form.company.value })
+      })
+        .then(function (r) { return r.json().catch(function () { return {}; }).then(function (body) { return { ok: r.ok, body: body }; }); })
+        .then(function (res) {
+          if (!res.ok) throw new Error(res.body.error || '');
+          form.hidden = true;
+          box.classList.add('done');
+          msg.className = 'wl-msg ok';
+          msg.textContent = res.body.duplicate ? "You're already on the list. We'll email you when it's out." : "You're on the list. We'll email you when OptHelper is out.";
+        })
+        .catch(function (err) {
+          submit.disabled = false;
+          msg.textContent = err.message || "Couldn't reach the waitlist. Try again in a minute.";
+        });
+    });
+  });
+
+  // "Try OptHelper": the Mac below the hero becomes a small working screen. The notch opens when the
+  // pointer comes near it, and holding ⌥ with Sunset.png selected opens the Smart Wheel, with the same
+  // Convert list and quick actions as SmartWheel.swift in the app (for a single image).
+  (function () {
+    var mac = document.querySelector('[data-mac]');
+    var screen = mac.querySelector('.screen'), island = mac.querySelector('[data-island]');
+    var desk = mac.querySelector('[data-desk]'), shelf = mac.querySelector('[data-shelf]'), pop = mac.querySelector('[data-pop]');
+    var bar = document.querySelector('[data-demo-bar]'), hint = document.querySelector('[data-hint]');
+    var caption = document.querySelector('[data-caption]');
+    var touch = window.matchMedia('(hover: none)').matches;
+
+    var I = {
+      photo: '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/>',
+      zip: '<rect x="3" y="4" width="18" height="5" rx="1"/><path d="M5 9v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9"/><path d="M10 13h4"/>',
+      shrink: '<path d="M4 14h6v6"/><path d="M20 10h-6V4"/><path d="m14 10 7-7"/><path d="m3 21 7-7"/>',
+      gray: '<circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/>',
+      share: '<path d="M12 3v12"/><path d="m8 7 4-4 4 4"/><path d="M7 11H5v10h14V11h-2"/>',
+      shelf: '<path d="M12 3v9"/><path d="m8 8 4 4 4-4"/><path d="M3 14h5l1.5 3h5L16 14h5v6H3z"/>',
+      link: '<path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.5-1.5"/>',
+      ok: '<circle cx="12" cy="12" r="10" fill="#30d158" stroke="none"/><path d="m7.5 12.5 3 3 6-6.5" stroke="#fff"/>',
+      warn: '<path d="M12 3 2 21h20z" fill="#ff9f0a" stroke="none"/><path d="M12 10v5M12 18v.5" stroke="#000"/>'
+    };
+    function icon(name, extra) {
+      return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"' + (extra || '') + '>' + I[name] + '</svg>';
+    }
+
+    // FileConverter.routes(for:) for an image, minus the file's own format.
+    var FORMATS = [['jpg', 'JPEG'], ['png', 'PNG'], ['pdf', 'PDF'], ['webp', 'WEBP'], ['heic', 'HEIC'], ['gif', 'GIF'],
+      ['tiff', 'TIFF'], ['avif', 'AVIF'], ['bmp', 'BMP'], ['ico', 'ICO'], ['icns', 'ICNS'], ['psd', 'PSD'],
+      ['jp2', 'JPEG 2000'], ['tga', 'TGA'], ['exr', 'EXR']];
+
+    var S = { on: false, files: [], sel: null, shelf: [], open: false, pinned: 0, ptr: null, wheel: null,
+              done: { notch: false, select: false, wheel: false, convert: false, action: false } };
+    var nid = 0;
+    function addFile(name, look, isNew) {
+      var ext = name.split('.').pop().toLowerCase();
+      var f = { id: ++nid, name: name, kind: ext === 'pdf' ? 'pdf' : ext === 'zip' ? 'zip' : 'image', look: look || '', isNew: isNew };
+      S.files.push(f);
+      // Room for four columns of five; older results make way.
+      while (S.files.length > 20) S.files.splice(1, 1);
+      return f;
+    }
+    addFile('Sunset.png');
+
+    function unique(name) {
+      var dot = name.lastIndexOf('.'), base = name.slice(0, dot), ext = name.slice(dot), n = 2, out = name;
+      var taken = function (x) { return S.files.some(function (f) { return f.name === x; }); };
+      while (taken(out)) out = base + ' ' + (n++) + ext;
+      return out;
+    }
+    function thumb(f) {
+      if (f.kind === 'pdf') return '<span class="t pdf"></span>';
+      if (f.kind === 'zip') return '<span class="t zip"></span>';
+      return '<span class="t img ' + f.look + '"></span>';
+    }
+    function esc(t) { var d = document.createElement('span'); d.textContent = t; return d.innerHTML; }
+    function fileHTML(f, on, i) {
+      // Finder's desktop order: down the right edge, five to a column, then the next column to the left.
+      var at = i == null ? '' : ' style="grid-row:' + (i % 5 + 1) + ';grid-column:' + (Math.floor(i / 5) + 1) + '"';
+      return '<button type="button" class="file' + (on ? ' on' : '') + (f.isNew ? ' pop' : '') + '" data-file="' + f.id + '"' + at + '>' +
+        thumb(f) + '<span class="n">' + esc(f.name) + '</span></button>';
+    }
+    function renderDesk() {
+      desk.innerHTML = S.files.map(function (f, i) { return fileHTML(f, S.sel === f.id, i); }).join('');
+      S.files.forEach(function (f) { f.isNew = false; });
+    }
+    function renderShelf() {
+      shelf.hidden = !S.shelf.length;
+      shelf.innerHTML = S.shelf.slice(-3).map(function (f) { return fileHTML(f, false); }).join('');
+    }
+    function selected() { return S.files.filter(function (f) { return f.id === S.sel; })[0]; }
+
+    // ---- Hints under the Mac ----
+    function updateHint() {
+      var d = S.done, t;
+      if (!d.notch) t = touch ? 'Tap the notch at the top of the screen.' : 'Move your pointer up to the notch.';
+      else if (!d.select) t = 'Now ' + (touch ? 'tap' : 'click') + ' Sunset.png on the desktop to select it.';
+      else if (!d.wheel) t = touch ? 'Tap ⌥ below to open the Smart Wheel.' : 'Hold ⌥ Option. The Smart Wheel opens at your pointer.';
+      else if (!d.convert && !d.action) t = touch ? 'Tap a format to convert, or ⌥` for quick actions.' : 'Move to a format and let go of ⌥ to convert. Press ⌥` for quick actions.';
+      else if (!d.action) t = 'Now hold ⌥ and press ⌥` for Compress, Grayscale, Add to Shelf and more.';
+      else if (!d.convert) t = (touch ? 'Tap ⌥ again' : 'Hold ⌥ again') + ' and pick a format to convert Sunset.png.';
+      else t = 'That’s the Smart Wheel. In the app it also handles PDFs, video, audio, documents and more.';
+      hint.textContent = t;
+    }
+    function mark(step) { if (!S.done[step]) { S.done[step] = true; updateHint(); } }
+
+    // ---- The notch ----
+    function setOpen(open) {
+      if (S.open === open) return;
+      S.open = open;
+      mac.classList.toggle('notch-open', open);
+      if (open) mark('notch');
+    }
+    var dwell = 0, grace = 0;
+    function nearNotch(x, y) {
+      var r = island.getBoundingClientRect();
+      if (S.open) return x > r.left - 12 && x < r.right + 12 && y < r.bottom + 12 && y > r.top - 40;
+      var l = r.left + r.width * 0.419, w = r.width * 0.162, h = r.height * 0.126, m = 24;
+      return x > l - m && x < l + w + m && y < r.top + h + m && y > r.top - 40;
+    }
+    function trackNotch(x, y) {
+      if (Date.now() < S.pinned) return;
+      if (nearNotch(x, y)) {
+        clearTimeout(grace); grace = 0;
+        if (!S.open && !dwell) dwell = setTimeout(function () { dwell = 0; setOpen(true); }, 120);
+      } else {
+        clearTimeout(dwell); dwell = 0;
+        if (S.open && !grace) grace = setTimeout(function () { grace = 0; setOpen(false); }, 300);
+      }
+    }
+
+    // ---- Positions (relative to the Mac) ----
+    function local(x, y) { var r = mac.getBoundingClientRect(); return { x: x - r.left, y: y - r.top }; }
+    function fileSpot() {
+      var el = desk.querySelector('[data-file="' + S.sel + '"]') || desk.querySelector('.file');
+      var r = el.getBoundingClientRect();
+      return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+    }
+    function pointerOnScreen() {
+      if (!S.ptr) return false;
+      var r = screen.getBoundingClientRect();
+      return S.ptr.x >= r.left && S.ptr.x <= r.right && S.ptr.y >= r.top && S.ptr.y <= r.bottom;
+    }
+
+    // ---- Toasts ----
+    var toastEl = null, toastTimer = 0;
+    function toast(text, kind, at) {
+      clearTimeout(toastTimer);
+      if (toastEl) toastEl.remove();
+      var p = at || (pointerOnScreen() ? S.ptr : fileSpot()), l = local(p.x, p.y), w = mac.clientWidth;
+      toastEl = document.createElement('div');
+      toastEl.className = 'toast';
+      toastEl.innerHTML = (kind === 'busy' ? '<span class="spin"></span>' : icon(kind === 'error' ? 'warn' : 'ok', ' stroke-width="2.4"')) + '<span></span>';
+      toastEl.lastChild.textContent = text;
+      toastEl.style.left = Math.min(Math.max(l.x, 120), w - 120) + 'px';
+      toastEl.style.top = (l.y + 26) + 'px';
+      pop.appendChild(toastEl);
+      if (kind !== 'busy') toastTimer = setTimeout(function () { if (toastEl) { toastEl.remove(); toastEl = null; } }, kind === 'error' ? 4500 : 2600);
+    }
+
+    // ---- The Smart Wheel ----
+    function pages(f) {
+      var own = f.name.split('.').pop().toLowerCase().replace('jpeg', 'jpg');
+      var convert = FORMATS.filter(function (x) { return x[0] !== own; }).map(function (x) {
+        return { title: 'To ' + x[1], icon: 'photo', run: function () { convertTo(f, x); } };
+      });
+      return [
+        { title: 'Convert', list: true, slots: convert },
+        { title: 'Actions', slots: [
+          { title: 'Compress to ZIP', label: 'Compress', icon: 'zip', run: function () { mark('action'); work(f, 'Compressing…', unique(f.name + '.zip')); } },
+          { title: 'Half size', label: 'Shrink', icon: 'shrink', run: function () { mark('action'); work(f, 'Shrinking…', unique(base(f) + ' (small).png'), 'small'); } },
+          { title: 'Grayscale', label: 'Gray', icon: 'gray', run: function () { mark('action'); work(f, 'Converting…', unique(base(f) + ' (gray).png'), 'gray'); } },
+          { title: 'Share', label: 'Share', icon: 'share', run: function () { mark('action'); toast('In the app, this opens the macOS share menu for ' + f.name); } },
+          { title: 'Add to notch shelf', label: 'Shelf', icon: 'shelf', run: function () { toShelf(f); } },
+          { title: 'Copy path', label: 'Path', icon: 'link', run: function () { copyPath(f); } }
+        ] }
+      ];
+    }
+    function base(f) { return f.name.slice(0, f.name.lastIndexOf('.')); }
+
+    function openWheel(byKey) {
+      var f = selected();
+      if (!f) { toast((touch ? 'Tap' : 'Click') + ' Sunset.png first, then ' + (touch ? 'tap ⌥' : 'hold ⌥'), 'error'); return; }
+      if (f.kind !== 'image') { toast('This demo converts images. The app also handles ' + f.kind.toUpperCase() + ' files.', 'error'); return; }
+      var at = byKey && pointerOnScreen() ? S.ptr : fileSpot();
+      S.wheel = { pages: pages(f), page: 0, byKey: byKey, sel: null, at: local(at.x, at.y), file: f };
+      renderWheel();
+      mark('wheel');
+    }
+    function closeWheel() {
+      if (!S.wheel) return;
+      S.wheel = null;
+      var el = pop.querySelector('.wheel, .wlist');
+      if (el) el.remove();
+    }
+    function nextPage() {
+      var w = S.wheel;
+      if (!w) return;
+      w.page = (w.page + 1) % w.pages.length;
+      w.sel = null;
+      if (w.byKey && pointerOnScreen()) w.at = local(S.ptr.x, S.ptr.y);
+      renderWheel();
+    }
+    function pick() {
+      var w = S.wheel;
+      if (!w) return;
+      var slot = w.sel == null ? null : w.pages[w.page].slots[w.sel];
+      closeWheel();
+      if (slot) slot.run();
+    }
+
+    var LIST_W = 250, ROW = 28, HEAD = 50, PAD = 9;
+    function renderWheel() {
+      var w = S.wheel, pg = w.pages[w.page], other = w.pages[(w.page + 1) % w.pages.length].title;
+      var old = pop.querySelector('.wheel, .wlist');
+      if (old) old.remove();
+      var el = document.createElement('div');
+      if (pg.list) {
+        el.className = 'wlist';
+        var left = Math.min(Math.max(w.at.x - LIST_W / 2 - PAD, 4), mac.clientWidth - LIST_W - 2 * PAD - 4);
+        el.style.left = left + 'px';
+        el.style.top = (w.at.y - HEAD / 2 - PAD) + 'px';
+        el.innerHTML = '<div class="hd" data-next><b>' + pg.title + '</b><span>' + esc(w.file.name) + '</span><em>⌥` ' + other + '</em></div>' +
+          pg.slots.map(function (s, i) { return '<div class="row" data-slot="' + i + '">' + icon(s.icon) + esc(s.title) + '</div>'; }).join('');
+      } else {
+        el.className = 'wheel';
+        el.style.left = w.at.x + 'px';
+        el.style.top = w.at.y + 'px';
+        el.innerHTML = wheelSVG(w, pg, other);
+      }
+      pop.appendChild(el);
+      highlight();
+    }
+
+    // Ring geometry from WheelMetrics: outer 132, inner 50, in a 288 box; slice 0 at the top, then clockwise.
+    var C = 144, OUT = 132, IN = 50;
+    function pt(r, deg) { var t = (deg - 90) * Math.PI / 180; return (C + r * Math.cos(t)).toFixed(2) + ' ' + (C + r * Math.sin(t)).toFixed(2); }
+    function slice(a0, a1, r0, r1) {
+      var big = a1 - a0 > 180 ? 1 : 0;
+      return 'M' + pt(r1, a0) + 'A' + r1 + ' ' + r1 + ' 0 ' + big + ' 1 ' + pt(r1, a1) + 'L' + pt(r0, a1) + 'A' + r0 + ' ' + r0 + ' 0 ' + big + ' 0 ' + pt(r0, a0) + 'Z';
+    }
+    function wheelSVG(w, pg, other) {
+      var n = pg.slots.length, span = 360 / n, h = '<svg viewBox="0 0 288 288" aria-hidden="true">';
+      h += '<circle cx="144" cy="144" r="' + (OUT + IN) / 2 + '" fill="none" stroke="rgba(26,26,30,.9)" stroke-width="' + (OUT - IN) + '"/>';
+      h += '<circle cx="144" cy="144" r="' + OUT + '" fill="none" stroke="rgba(255,255,255,.12)"/>';
+      pg.slots.forEach(function (s, i) {
+        var mid = i * span, r = (OUT + IN) / 2, t = (mid - 90) * Math.PI / 180;
+        var x = C + r * Math.cos(t), y = C + r * Math.sin(t);
+        h += '<path data-slice="' + i + '" d="' + slice(mid - span / 2 + 1.2, mid + span / 2 - 1.2, IN + 3, OUT - 3) + '" fill="rgba(255,255,255,.06)"/>';
+        h += '<g data-look="' + i + '" color="#fff" transform="translate(' + x.toFixed(1) + ' ' + y.toFixed(1) + ')">' +
+          '<g transform="translate(-10 -19) scale(.84)" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + I[s.icon] + '</g>' +
+          '<text y="16" text-anchor="middle" font-size="10" font-weight="600" fill="#fff">' + esc(s.label) + '</text></g>';
+      });
+      h += '<circle cx="144" cy="144" r="' + (IN - 4) + '" fill="rgba(0,0,0,.75)" stroke="rgba(255,255,255,.15)"/>';
+      h += '<text data-centre x="144" y="144" text-anchor="middle" fill="#fff" font-size="11" font-weight="600"></text>';
+      return h + '</svg>';
+    }
+    function centreText(lines) {
+      var t = pop.querySelector('[data-centre]');
+      if (!t) return;
+      var y0 = 144 - (lines.length - 1) * 6.5 + 3.5;
+      t.innerHTML = lines.map(function (l, i) {
+        return '<tspan x="144" y="' + (y0 + i * 13) + '"' + (l[1] ? ' font-size="' + l[1] + '" fill-opacity="' + (l[2] || 1) + '" font-weight="' + (l[3] || 500) + '"' : '') + '>' + esc(l[0]) + '</tspan>';
+      }).join('');
+    }
+    function wrap(t) {
+      var words = t.split(' '), lines = [], cur = '';
+      words.forEach(function (wd) { if ((cur + ' ' + wd).trim().length > 11 && cur) { lines.push(cur); cur = wd; } else cur = (cur + ' ' + wd).trim(); });
+      return lines.concat(cur ? [cur] : []);
+    }
+
+    // Which slot the pointer is on: like WheelMetrics.slice / row, nothing until it leaves the dead zone.
+    function hover(x, y) {
+      var w = S.wheel;
+      if (!w) return;
+      var pg = w.pages[w.page], el = pop.querySelector('.wheel, .wlist'), r = el.getBoundingClientRect(), sel = null;
+      if (pg.list) {
+        var dy = y - (r.top + PAD + HEAD), i = Math.floor(dy / ROW);
+        if (dy >= 0 && x > r.left - 40 && x < r.right + 40 && i < pg.slots.length) sel = i;
+      } else {
+        var k = r.width / 288, dx = x - (r.left + r.width / 2), dyu = (r.top + r.height / 2) - y;
+        if (Math.hypot(dx, dyu) > 26 * k && Math.hypot(dx, dyu) < (OUT + 40) * k) {
+          var span = 360 / pg.slots.length, deg = Math.atan2(dx, dyu) * 180 / Math.PI;
+          deg = (deg + span / 2) % 360;
+          if (deg < 0) deg += 360;
+          sel = Math.floor(deg / span) % pg.slots.length;
+        }
+      }
+      if (sel !== w.sel) { w.sel = sel; highlight(); }
+    }
+    function highlight() {
+      var w = S.wheel, pg = w.pages[w.page];
+      if (pg.list) {
+        pop.querySelectorAll('.row').forEach(function (r, i) { r.classList.toggle('on', i === w.sel); });
+        return;
+      }
+      pop.querySelectorAll('[data-slice]').forEach(function (p, i) { p.setAttribute('fill', i === w.sel ? 'rgba(47,124,246,.88)' : 'rgba(255,255,255,.06)'); });
+      pop.querySelectorAll('[data-look]').forEach(function (g, i) {
+        var t = g.getAttribute('transform').replace(/ scale\([^)]*\)/, '');
+        g.setAttribute('transform', t + (i === w.sel ? ' scale(1.12)' : ''));
+      });
+      if (w.sel != null) centreText(wrap(pg.slots[w.sel].title).map(function (l) { return [l]; }));
+      else centreText([[pg.title, 12, 1, 650], [w.file.name, 8, .6], ['⌥` ' + w.pages[(w.page + 1) % w.pages.length].title, 8, .5, 600]]);
+    }
+
+    // ---- What the slots do ----
+    function work(f, label, out, look) {
+      var at = pointerOnScreen() ? S.ptr : fileSpot();
+      toast(label, 'busy', at);
+      setTimeout(function () {
+        addFile(out, look || f.look, true);
+        renderDesk();
+        toast('Saved ' + out, 'ok', at);
+      }, 650);
+    }
+    function convertTo(f, fmt) {
+      mark('convert');
+      work(f, (fmt[0] === 'pdf' ? 'Converting to PDF…' : 'Converting to ' + fmt[1] + '…'), unique(base(f) + '.' + fmt[0]));
+    }
+    function toShelf(f) {
+      mark('action');
+      if (!S.shelf.some(function (x) { return x.name === f.name; })) S.shelf.push({ id: 'shelf' + f.id, name: f.name, kind: f.kind, look: f.look });
+      renderShelf();
+      toast('Added to the shelf');
+      S.pinned = Date.now() + 1800;
+      setOpen(true);
+      setTimeout(function () { S.pinned = 0; if (S.ptr) trackNotch(S.ptr.x, S.ptr.y); else setOpen(false); }, 1800);
+    }
+    function copyPath(f) {
+      mark('action');
+      var path = '/Users/you/Desktop/' + f.name;
+      try { navigator.clipboard.writeText(path).catch(function () {}); } catch (e) {}
+      toast('Copied the path');
+    }
+    // ---- Turning the demo on and off ----
+    function start() {
+      if (!S.on) {
+        S.on = true;
+        mac.classList.add('is-demo');
+        mac.removeAttribute('role');
+        caption.hidden = true;
+        bar.hidden = false;
+        S.open = true;
+        setOpen(false);
+        renderDesk();
+        renderShelf();
+        updateHint();
+      }
+      mac.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });
+    }
+    function stop() {
+      S.on = false;
+      closeWheel();
+      if (toastEl) { toastEl.remove(); toastEl = null; }
+      mac.classList.remove('is-demo', 'notch-open');
+      mac.setAttribute('role', 'img');
+      S.open = false;
+      caption.hidden = false;
+      bar.hidden = true;
+    }
+    document.querySelectorAll('[data-try]').forEach(function (b) { b.addEventListener('click', start); });
+    document.querySelector('[data-exit]').addEventListener('click', stop);
+    document.querySelector('[data-key-wheel]').addEventListener('click', function () {
+      if (S.wheel) closeWheel(); else openWheel(false);
+    });
+    document.querySelector('[data-key-page]').addEventListener('click', function () {
+      if (S.wheel) nextPage(); else toast('Open the Smart Wheel first', 'error');
+    });
+
+    // ---- Pointer ----
+    window.addEventListener('pointermove', function (e) {
+      if (!S.on) return;
+      S.ptr = { x: e.clientX, y: e.clientY };
+      if (e.pointerType !== 'touch') trackNotch(e.clientX, e.clientY);
+      hover(e.clientX, e.clientY);
+    }, { passive: true });
+    screen.addEventListener('pointerdown', function (e) {
+      if (!S.on || S.wheel) return;
+      S.ptr = { x: e.clientX, y: e.clientY };
+      var file = e.target.closest('[data-file]');
+      if (file && desk.contains(file)) {
+        S.sel = +file.dataset.file;
+        renderDesk();
+        mark('select');
+        return;
+      }
+      // Touch has no hover: a tap on the notch opens the island, any tap while it's open closes it.
+      if (e.pointerType === 'touch' && (S.open || nearNotch(e.clientX, e.clientY))) { setOpen(!S.open); return; }
+      if (!island.contains(e.target) || !S.open) { S.sel = null; renderDesk(); }
+    });
+    // With the wheel open, a click or tap picks the slot under it; the centre or list header flips the page.
+    pop.addEventListener('pointerup', function (e) {
+      if (!S.wheel) return;
+      if (e.target.closest('[data-next]')) { nextPage(); return; }
+      hover(e.clientX, e.clientY);
+      if (S.wheel.sel != null) { pick(); return; }
+      var el = pop.querySelector('.wheel');
+      if (el) {
+        var r = el.getBoundingClientRect();
+        if (Math.hypot(e.clientX - r.left - r.width / 2, e.clientY - r.top - r.height / 2) < IN * r.width / 288) nextPage();
+      }
+    });
+    document.addEventListener('pointerdown', function (e) {
+      if (S.wheel && !pop.contains(e.target) && !e.target.closest('.demo-keys')) closeWheel();
+    });
+
+    // ---- ⌥ ----
+    // Held on its own for a moment it opens the wheel; letting go picks. ⌥` flips pages, any other key calls it off.
+    var holdTimer = 0, altHeld = false;
+    function inView() { var r = mac.getBoundingClientRect(); return r.bottom > 0 && r.top < window.innerHeight; }
+    window.addEventListener('keydown', function (e) {
+      if (!S.on || e.target.closest('input, textarea')) return;
+      if (e.key === 'Alt') {
+        if (e.repeat || altHeld) return;
+        e.preventDefault();
+        altHeld = true;
+        if (!S.wheel && inView()) holdTimer = setTimeout(function () { holdTimer = 0; if (altHeld) openWheel(true); }, 180);
+        return;
+      }
+      if (e.code === 'Backquote' && (e.altKey || (S.wheel && !S.wheel.byKey))) {
+        if (S.wheel) { e.preventDefault(); nextPage(); }
+        return;
+      }
+      if (e.key === 'Escape' && S.wheel) { closeWheel(); return; }
+      if (altHeld) { clearTimeout(holdTimer); holdTimer = 0; if (S.wheel && S.wheel.byKey) closeWheel(); }
+    });
+    window.addEventListener('keyup', function (e) {
+      if (e.key !== 'Alt' || !altHeld) return;
+      altHeld = false;
+      e.preventDefault();
+      clearTimeout(holdTimer); holdTimer = 0;
+      if (S.wheel && S.wheel.byKey) pick();
+    });
+    window.addEventListener('blur', function () {
+      altHeld = false;
+      clearTimeout(holdTimer); holdTimer = 0;
+      if (S.wheel && S.wheel.byKey) closeWheel();
+    });
+  })();
 
   document.querySelectorAll('.copy').forEach(function (b) {
     b.addEventListener('click', function () {
