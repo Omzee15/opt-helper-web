@@ -11,7 +11,8 @@
 <meta property="og:url" content="https://opthelper.buildc3.tech/">
 <meta property="og:video" content="https://opthelper.buildc3.tech/assets/opthelper-launch.mp4">
 <link rel="canonical" href="https://opthelper.buildc3.tech/">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23111'/%3E%3Cpath d='M14 18h36v8a14 14 0 0 1-14 14h-8a14 14 0 0 1-14-14z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="icon" type="image/png" sizes="64x64" href="assets/favicon-64.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <style>
   :root {
     --bg: #f6f5f2;
@@ -64,8 +65,8 @@
     padding: 20px 0;
   }
   .brand { display: flex; align-items: center; gap: 10px; font-weight: 650; letter-spacing: -0.01em; text-decoration: none; }
-  .brand-mark { width: 26px; height: 26px; border-radius: 7px; background: #111; display: grid; place-items: center; box-shadow: inset 0 0 0 1px rgba(255,255,255,.16); }
-  .brand-mark span { width: 15px; height: 7px; background: #fff; border-radius: 0 0 5px 5px; margin-top: -6px; }
+  .brand-mark { width: 30px; height: 30px; display: block; }
+  .app-icon { display: block; width: 112px; height: 112px; margin: 0 auto 22px; filter: drop-shadow(0 14px 28px rgba(80, 60, 220, .35)); }
   .nav a.gh { color: var(--muted); text-decoration: none; font-size: 15px; }
   .nav a.gh:hover { color: var(--text); }
 
@@ -211,12 +212,13 @@
 <body>
   <div class="wrap">
     <header class="nav">
-      <a class="brand" href="#"><span class="brand-mark"><span></span></span>OptHelper</a>
+      <a class="brand" href="#"><img class="brand-mark" src="assets/icon-512.png" alt="" width="30" height="30">OptHelper</a>
       <a class="gh" href="https://github.com/Omzee15/opt-helper">GitHub</a>
     </header>
 
     <main>
       <div class="hero">
+        <img class="app-icon" src="assets/icon-512.png" alt="OptHelper app icon" width="112" height="112">
         <h1>Your Mac's notch, put to work.</h1>
         <p class="lede">Hover the notch and it opens into a little island: what's playing on a spinning record, a shelf for files you're moving around, and a launcher that understands plain words.</p>
         <div class="cta">
@@ -277,7 +279,7 @@
           <div class="card">
             <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="m9 15 2 2 4-4"/></svg></div>
             <h3>A Smart Wheel for files</h3>
-            <p>Select files in Finder and hold ⌥ to convert them: images, PDFs, documents, video, audio and more. Tab for Compress, Share and actions for the file type.</p>
+            <p>Select files in Finder and hold ⌥ to convert them: images, PDFs, documents, video, audio and more. Press ⌥` for Compress, Share and actions for the file type.</p>
           </div>
           <div class="card">
             <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 4v16M3 9h5"/></svg></div>
