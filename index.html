@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>OptHelper — your Mac's notch, put to work</title>
-<meta name="description" content="OptHelper turns the notch on your Mac into a music turntable, a file shelf and an AI launcher. Free download for macOS.">
+<meta name="description" content="OptHelper turns the notch on your Mac into a music turntable, a file shelf and an AI launcher, with an ⌥ wheel for your apps and a Smart Wheel that converts files. Free download for macOS.">
 <meta property="og:title" content="OptHelper — your Mac's notch, put to work">
-<meta property="og:description" content="A music turntable, a file shelf and an AI launcher, hanging from your Mac's notch.">
+<meta property="og:description" content="A music turntable, a file shelf, an AI launcher and an ⌥ wheel for apps and files, all from your Mac's notch.">
 <meta property="og:image" content="assets/notch.png">
 <meta property="og:url" content="https://opthelper.buildc3.tech/">
 <meta property="og:video" content="https://opthelper.buildc3.tech/assets/opthelper-launch.mp4">
@@ -89,6 +89,10 @@
   .btn:active { transform: translateY(0); }
   .btn svg { width: 18px; height: 18px; }
   .cta small { color: var(--muted); font-size: 13.5px; }
+  .release { color: var(--muted); font-size: 13.5px; min-height: 1.55em; margin: 0; }
+  .release a { color: var(--muted); text-underline-offset: 2px; }
+  .release a:hover { color: var(--text); }
+  .release .ver { color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
 
   /* The Mac: a screen with a menu bar and the island hanging from the notch. */
   .mac { margin: 8px auto 0; max-width: 980px; }
@@ -216,11 +220,12 @@
         <h1>Your Mac's notch, put to work.</h1>
         <p class="lede">Hover the notch and it opens into a little island: what's playing on a spinning record, a shelf for files you're moving around, and a launcher that understands plain words.</p>
         <div class="cta">
-          <a class="btn" href="https://github.com/Omzee15/opt-helper/releases/latest/download/OptHelper.dmg">
+          <a class="btn" data-download href="https://github.com/Omzee15/opt-helper/releases/latest/download/OptHelper.dmg">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/></svg>
             Download for Mac
           </a>
           <small>Free · macOS 13 or later · Apple Silicon &amp; Intel</small>
+          <p class="release" data-release aria-live="polite"><a href="https://github.com/Omzee15/opt-helper/releases/latest">Latest release on GitHub</a></p>
         </div>
       </div>
 
@@ -246,8 +251,8 @@
       </section>
 
       <section id="features">
-        <h2>Three things, right where you look.</h2>
-        <p class="section-lede">Everything lives in the notch, so it's never in the way and always one move of the pointer away.</p>
+        <h2>Right where you look.</h2>
+        <p class="section-lede">Everything lives in the notch or under your ⌥ key, so it's never in the way and always one move away.</p>
         <div class="features">
           <div class="card">
             <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/></svg></div>
@@ -261,8 +266,23 @@
           </div>
           <div class="card">
             <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg></div>
-            <h3>A launcher that gets you</h3>
-            <p>Press ⌥ Space and type what you want: “open my repo”, “the docs for that API”. An AI model works out the links, apps or terminal shortcuts.</p>
+            <h3>A launcher that does things</h3>
+            <p>Press ⌥ Space and say what you want: “open my repo”, “close all my Chrome tabs”, “volume 30”, “what's my IP”. An AI model opens it or runs the command for you, and asks first before anything risky.</p>
+          </div>
+          <div class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><path d="M12 3v6M12 15v6M3 12h6M15 12h6"/></svg></div>
+            <h3>An ⌥ wheel for your apps</h3>
+            <p>Hold ⌥ on its own and a wheel opens at the pointer. Flick toward a slice to open its apps, or bring them back. Each slice can hold several apps that open together.</p>
+          </div>
+          <div class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="m9 15 2 2 4-4"/></svg></div>
+            <h3>A Smart Wheel for files</h3>
+            <p>Select files in Finder and hold ⌥ to convert them: images, PDFs, documents, video, audio and more. Tab for Compress, Share and actions for the file type.</p>
+          </div>
+          <div class="card">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 4v16M3 9h5"/></svg></div>
+            <h3>A music library</h3>
+            <p>Paste a Spotify or YouTube Music link, or drag a playlist onto the notch. Drop a record on the turntable to play it.</p>
           </div>
         </div>
       </section>
@@ -300,10 +320,11 @@
 
       <div class="final">
         <h2>Give your notch a job.</h2>
-        <a class="btn" href="https://github.com/Omzee15/opt-helper/releases/latest/download/OptHelper.dmg">
+        <a class="btn" data-download href="https://github.com/Omzee15/opt-helper/releases/latest/download/OptHelper.dmg">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/></svg>
           Download OptHelper
         </a>
+        <p class="release" data-release style="margin-top:12px"><a href="https://github.com/Omzee15/opt-helper/releases/latest">Latest release on GitHub</a></p>
       </div>
     </main>
 
@@ -314,6 +335,49 @@
   </div>
 
 <script>
+  // The newest release on GitHub: its version, date and size under the download buttons,
+  // and the buttons point straight at its DMG. Without it the static /latest/download links still work.
+  (function () {
+    var REPO = 'Omzee15/opt-helper', KEY = 'opthelper-release', ASSET = 'OptHelper.dmg';
+
+    function show(rel) {
+      var dmg = (rel.assets || []).filter(function (a) { return a.name === ASSET; })[0];
+      if (!dmg) return;
+      document.querySelectorAll('[data-download]').forEach(function (a) { a.href = dmg.browser_download_url; });
+      // A DMG re-uploaded to an existing release is newer than the release itself.
+      var when = new Date(Math.max(Date.parse(rel.published_at) || 0, Date.parse(dmg.updated_at) || 0));
+      var date = when.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+      var mb = (dmg.size / 1048576).toFixed(1) + ' MB';
+      var ver = (rel.tag_name || '').replace(/^v/, '');
+      document.querySelectorAll('[data-release]').forEach(function (p) {
+        p.textContent = '';
+        var v = document.createElement('span');
+        v.className = 'ver';
+        v.textContent = 'Version ' + ver;
+        var notes = document.createElement('a');
+        notes.href = rel.html_url;
+        notes.textContent = 'Release notes';
+        p.append(v, ' · ' + date + ' · ' + mb + ' · ', notes);
+      });
+    }
+
+    try {
+      var cached = JSON.parse(sessionStorage.getItem(KEY) || 'null');
+      if (cached) { show(cached); return; }
+    } catch (e) {}
+
+    fetch('https://api.github.com/repos/' + REPO + '/releases/latest', { headers: { Accept: 'application/vnd.github+json' } })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (rel) {
+        if (!rel || !rel.tag_name) return;
+        var slim = { tag_name: rel.tag_name, html_url: rel.html_url, published_at: rel.published_at,
+                     assets: (rel.assets || []).map(function (a) { return { name: a.name, size: a.size, updated_at: a.updated_at, browser_download_url: a.browser_download_url }; }) };
+        try { sessionStorage.setItem(KEY, JSON.stringify(slim)); } catch (e) {}
+        show(slim);
+      })
+      .catch(function () {});
+  })();
+
   document.querySelectorAll('.copy').forEach(function (b) {
     b.addEventListener('click', function () {
       var text = document.getElementById(b.dataset.copy).textContent;
