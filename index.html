@@ -8,6 +8,9 @@
 <meta property="og:title" content="OptHelper — your Mac's notch, put to work">
 <meta property="og:description" content="A music turntable, a file shelf and an AI launcher, hanging from your Mac's notch.">
 <meta property="og:image" content="assets/notch.png">
+<meta property="og:url" content="https://opthelper.buildc3.tech/">
+<meta property="og:video" content="https://opthelper.buildc3.tech/assets/opthelper-launch.mp4">
+<link rel="canonical" href="https://opthelper.buildc3.tech/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23111'/%3E%3Cpath d='M14 18h36v8a14 14 0 0 1-14 14h-8a14 14 0 0 1-14-14z' fill='%23fff'/%3E%3C/svg%3E">
 <style>
   :root {
@@ -129,6 +132,12 @@
   }
   .caption { text-align: center; color: var(--muted); font-size: 14px; margin-top: 18px; }
 
+  .demo video {
+    display: block; width: 100%; height: auto; aspect-ratio: 16 / 9;
+    border-radius: 16px; background: #0b0b0c; border: 1px solid var(--line);
+    box-shadow: 0 30px 60px -36px rgba(0,0,0,.45);
+  }
+
   section { padding: 72px 0 0; }
   h2 { font-size: clamp(26px, 3.6vw, 34px); letter-spacing: -0.025em; line-height: 1.15; margin: 0 0 10px; font-weight: 700; }
   .section-lede { color: var(--muted); margin: 0 0 28px; max-width: 40em; }
@@ -226,6 +235,15 @@
         <div class="base" aria-hidden="true"></div>
       </div>
       <p class="caption">The island, as it opens from the notch.</p>
+
+      <section id="demo" class="demo">
+        <h2>See it in 85 seconds.</h2>
+        <p class="section-lede">The ⌥ wheel for your apps, the Smart Wheel for files in Finder, the ⌥ Space launcher, and music and files at the notch.</p>
+        <video controls playsinline preload="none" poster="assets/opthelper-launch-poster.jpg" width="1920" height="1080">
+          <source src="assets/opthelper-launch.mp4" type="video/mp4">
+          <a href="assets/opthelper-launch.mp4">Watch the OptHelper launch video</a>
+        </video>
+      </section>
 
       <section id="features">
         <h2>Three things, right where you look.</h2>
