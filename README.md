@@ -2,6 +2,12 @@
 
 The one-page download site for [OptHelper](https://github.com/Omzee15/opt-helper). Plain HTML, no build step.
 
-New releases are picked up automatically, as long as the release's asset is named `OptHelper.dmg`. On load, the page asks the GitHub API for the latest release of the app repo, shows its version, date and size under the download buttons, and points the buttons at that release's DMG. If the API can't be reached (offline, or GitHub's 60 requests an hour limit for anonymous calls), the buttons keep their static link, `https://github.com/Omzee15/opt-helper/releases/latest/download/OptHelper.dmg`, which also always serves the newest release.
+The app is served from this repo, not from GitHub releases. `releases/OptHelper.dmg` is always the newest build, and `releases/latest.json` holds its version, date and size, which the page shows under the download buttons.
+
+To ship a new release:
+
+1. Build the DMG in the app repo (`../opt_helper/package.sh`).
+2. Run `./release.sh` here (or `./release.sh path/to/OptHelper.dmg`). It copies the DMG into `releases/` and rewrites `latest.json`, reading the version from the app inside the DMG.
+3. Commit and deploy: `netlify deploy --prod`
 
 Deploy: `netlify deploy --prod`

@@ -91,8 +91,6 @@
   .btn svg { width: 18px; height: 18px; }
   .cta small { color: var(--muted); font-size: 13.5px; }
   .release { color: var(--muted); font-size: 13.5px; min-height: 1.55em; margin: 0; }
-  .release a { color: var(--muted); text-underline-offset: 2px; }
-  .release a:hover { color: var(--text); }
   .release .ver { color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
 
   /* The Mac: a screen with a menu bar and the island hanging from the notch. */
@@ -222,12 +220,12 @@
         <h1>Your Mac's notch, put to work.</h1>
         <p class="lede">Hover the notch and it opens into a little island: what's playing on a spinning record, a shelf for files you're moving around, and a launcher that understands plain words.</p>
         <div class="cta">
-          <a class="btn" data-download href="https://github.com/Omzee15/opt-helper/releases/latest/download/OptHelper.dmg">
+          <a class="btn" href="releases/OptHelper.dmg" download>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/></svg>
             Download for Mac
           </a>
           <small>Free · macOS 13 or later · Apple Silicon &amp; Intel</small>
-          <p class="release" data-release aria-live="polite"><a href="https://github.com/Omzee15/opt-helper/releases/latest">Latest release on GitHub</a></p>
+          <p class="release" data-release aria-live="polite"></p>
         </div>
       </div>
 
@@ -322,63 +320,37 @@
 
       <div class="final">
         <h2>Give your notch a job.</h2>
-        <a class="btn" data-download href="https://github.com/Omzee15/opt-helper/releases/latest/download/OptHelper.dmg">
+        <a class="btn" href="releases/OptHelper.dmg" download>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/></svg>
           Download OptHelper
         </a>
-        <p class="release" data-release style="margin-top:12px"><a href="https://github.com/Omzee15/opt-helper/releases/latest">Latest release on GitHub</a></p>
+        <p class="release" data-release style="margin-top:12px"></p>
       </div>
     </main>
 
     <footer>
       <span>OptHelper</span>
-      <span><a href="https://github.com/Omzee15/opt-helper/releases">All releases</a> · <a href="https://github.com/Omzee15/opt-helper">Source</a></span>
+      <span><a href="https://github.com/Omzee15/opt-helper">Source</a></span>
     </footer>
   </div>
 
 <script>
-  // The newest release on GitHub: its version, date and size under the download buttons,
-  // and the buttons point straight at its DMG. Without it the static /latest/download links still work.
-  (function () {
-    var REPO = 'Omzee15/opt-helper', KEY = 'opthelper-release', ASSET = 'OptHelper.dmg';
-
-    function show(rel) {
-      var dmg = (rel.assets || []).filter(function (a) { return a.name === ASSET; })[0];
-      if (!dmg) return;
-      document.querySelectorAll('[data-download]').forEach(function (a) { a.href = dmg.browser_download_url; });
-      // A DMG re-uploaded to an existing release is newer than the release itself.
-      var when = new Date(Math.max(Date.parse(rel.published_at) || 0, Date.parse(dmg.updated_at) || 0));
-      var date = when.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
-      var mb = (dmg.size / 1048576).toFixed(1) + ' MB';
-      var ver = (rel.tag_name || '').replace(/^v/, '');
+  // The version, date and size of releases/OptHelper.dmg, from the releases/latest.json that release.sh writes next to it.
+  fetch('releases/latest.json', { cache: 'no-cache' })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (rel) {
+      if (!rel || !rel.version) return;
+      var date = new Date(rel.date + 'T00:00:00').toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+      var mb = (rel.size / 1048576).toFixed(1) + ' MB';
       document.querySelectorAll('[data-release]').forEach(function (p) {
         p.textContent = '';
         var v = document.createElement('span');
         v.className = 'ver';
-        v.textContent = 'Version ' + ver;
-        var notes = document.createElement('a');
-        notes.href = rel.html_url;
-        notes.textContent = 'Release notes';
-        p.append(v, ' · ' + date + ' · ' + mb + ' · ', notes);
+        v.textContent = 'Version ' + rel.version;
+        p.append(v, ' · ' + date + ' · ' + mb);
       });
-    }
-
-    try {
-      var cached = JSON.parse(sessionStorage.getItem(KEY) || 'null');
-      if (cached) { show(cached); return; }
-    } catch (e) {}
-
-    fetch('https://api.github.com/repos/' + REPO + '/releases/latest', { headers: { Accept: 'application/vnd.github+json' } })
-      .then(function (r) { return r.ok ? r.json() : null; })
-      .then(function (rel) {
-        if (!rel || !rel.tag_name) return;
-        var slim = { tag_name: rel.tag_name, html_url: rel.html_url, published_at: rel.published_at,
-                     assets: (rel.assets || []).map(function (a) { return { name: a.name, size: a.size, updated_at: a.updated_at, browser_download_url: a.browser_download_url }; }) };
-        try { sessionStorage.setItem(KEY, JSON.stringify(slim)); } catch (e) {}
-        show(slim);
-      })
-      .catch(function () {});
-  })();
+    })
+    .catch(function () {});
 
   document.querySelectorAll('.copy').forEach(function (b) {
     b.addEventListener('click', function () {
