@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact — OptHelper</title>
+<meta name="description" content="How to reach the maker of OptHelper.">
+<link rel="canonical" href="https://opthelper.buildc3.tech/contact">
+<link rel="icon" type="image/png" sizes="64x64" href="/assets/favicon-64.png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<style>
+  :root {
+    --bg: #f6f5f2; --surface: #ffffff; --text: #17171a; --muted: #5f5f66;
+    --line: #e4e2dd; --accent: #c4502f; --code-bg: #efede8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f0f11; --surface: #18181b; --text: #f2f1ee; --muted: #a2a1a8;
+      --line: #2a2a2f; --accent: #e0694a; --code-bg: #1f1f23;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f0f11; --surface: #18181b; --text: #f2f1ee; --muted: #a2a1a8;
+    --line: #2a2a2f; --accent: #e0694a; --code-bg: #1f1f23;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 16px/1.6 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent); }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 16px 56px; }
+  header.nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 0; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 650; letter-spacing: -0.01em; text-decoration: none; color: var(--text); }
+  .brand img { width: 30px; height: 30px; display: block; }
+  .nav a.back { color: var(--muted); text-decoration: none; font-size: 15px; }
+  .nav a.back:hover { color: var(--text); }
+  h1 { font-size: clamp(30px, 5vw, 42px); line-height: 1.1; letter-spacing: -0.03em; margin: 36px 0 12px; }
+  h2 { font-size: 21px; letter-spacing: -0.015em; margin: 40px 0 10px; }
+  p { margin: 0 0 14px; }
+  .lede { color: var(--muted); font-size: 18px; }
+  .err {
+    display: inline-block; background: var(--surface); border: 1px solid var(--line);
+    border-radius: 10px; padding: 8px 14px; font-size: 15px; color: #d9453b;
+  }
+  .err a { color: inherit; }
+  ol.steps { list-style: none; counter-reset: s; padding: 0; margin: 18px 0 0; }
+  ol.steps > li {
+    counter-increment: s; position: relative; background: var(--surface); border: 1px solid var(--line);
+    border-radius: 14px; padding: 16px 18px 16px 58px; margin-bottom: 12px;
+  }
+  ol.steps > li::before {
+    content: counter(s); position: absolute; left: 16px; top: 16px; width: 28px; height: 28px;
+    border-radius: 50%; background: var(--accent); color: #fff; font-weight: 650; font-size: 14px;
+    display: grid; place-items: center;
+  }
+  ol.steps strong { display: block; margin-bottom: 4px; }
+  ol.steps p { margin: 0 0 10px; color: var(--muted); }
+  ol.steps p:last-child { margin-bottom: 0; }
+  code { font: 13.5px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; background: var(--code-bg); padding: 2px 6px; border-radius: 6px; }
+  pre { margin: 0 0 10px; background: var(--code-bg); border-radius: 10px; padding: 12px 14px; overflow-x: auto; }
+  pre code { background: none; padding: 0; }
+  footer { margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  footer a { color: var(--muted); }
+
+  h1 { margin-top: 28px; }
+  .updated { color: var(--muted); font-size: 14px; margin-bottom: 24px; }
+  ul.plain { padding-left: 20px; margin: 0 0 14px; }
+  ul.plain li { margin-bottom: 6px; }
+  footer nav { display: flex; gap: 14px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="nav">
+      <a class="brand" href="/"><img src="/assets/icon-512.png" alt="" width="30" height="30">OptHelper</a>
+      <a class="back" href="/">← Back to the site</a>
+    </header>
+    <main>
+      <h1>Contact</h1>
+      <p class="updated">Last updated 21 October 2026</p>
+
+      <p>Questions, a payment problem, or moving your license to a new Mac? We are happy to help.</p>
+      <ul class="plain">
+        <li><strong>Email:</strong> <a href="mailto:om.buildc3@gmail.com">om.buildc3@gmail.com</a>. We reply within 2 business days.</li>
+        <li><strong>Bugs and ideas:</strong> <a href="https://github.com/Omzee15/opt-helper/issues">GitHub issues</a></li>
+        <li><strong>Setup help:</strong> <a href="/help">the help page</a></li>
+      </ul>
+      <p>OptHelper is made by Om Gupta, India.</p>
+      <p>For a payment question, include the payment ID from your Razorpay receipt so we can find it quickly.</p>
+
+    </main>
+    <footer>
+      <span>OptHelper</span>
+      <nav><a href="/terms">Terms</a><a href="/privacy">Privacy</a><a href="/refund">Refunds</a><a href="/contact">Contact</a><a href="https://github.com/Omzee15/opt-helper">Source</a></nav>
+    </footer>
+  </div>
+</body>
+</html>

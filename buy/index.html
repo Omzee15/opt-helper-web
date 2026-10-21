@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Get OptHelper for life</title>
+<meta name="description" content="One payment, lifetime access to OptHelper on your Mac, including every future update.">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" sizes="64x64" href="/assets/favicon-64.png">
+<style>
+  :root { --bg:#f6f5f2; --surface:#fff; --text:#17171a; --muted:#5f5f66; --line:#e4e2dd; --accent:#c4502f; }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) { --bg:#0f0f11; --surface:#18181b; --text:#f2f1ee; --muted:#a2a1a8; --line:#2a2a2f; --accent:#e0694a; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); min-height:100vh; display:grid; place-items:center; padding:24px 16px;
+    font:16px/1.55 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", system-ui, sans-serif; -webkit-font-smoothing:antialiased; }
+  .card { width:100%; max-width:420px; background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:32px 28px; text-align:center; }
+  .card img { width:84px; height:84px; display:block; margin:0 auto 18px; }
+  h1 { font-size:26px; letter-spacing:-0.02em; margin:0 0 6px; }
+  p { color:var(--muted); margin:0 0 18px; }
+  .price { font-size:40px; font-weight:720; letter-spacing:-0.03em; color:var(--text); margin:6px 0 2px; }
+  ul { list-style:none; padding:0; margin:18px 0 24px; text-align:left; color:var(--muted); font-size:15px; }
+  li { padding:4px 0 4px 26px; position:relative; }
+  li::before { content:"✓"; position:absolute; left:4px; color:var(--accent); font-weight:700; }
+  button { width:100%; border:0; border-radius:999px; background:var(--accent); color:#fff; font:inherit; font-weight:640; font-size:17px; padding:15px 24px; cursor:pointer; }
+  button:disabled { opacity:.6; cursor:default; }
+  .msg { margin-top:16px; font-size:14.5px; min-height:1.4em; }
+  .err { color:#d9453b; }
+  .ok h1 { color:var(--accent); }
+  small { display:block; margin-top:18px; color:var(--muted); font-size:12.5px; }
+  small a { color:inherit; }
+</style>
+</head>
+<body>
+  <main class="card" id="card">
+    <img src="/assets/icon-512.png" alt="" width="84" height="84">
+    <div id="buy">
+      <h1>OptHelper for life</h1>
+      <div class="price" id="price">&nbsp;</div>
+      <p>One payment. No subscription.</p>
+      <ul>
+        <li>Unlocks OptHelper on this Mac, for good</li>
+        <li>Every future update included</li>
+        <li>It unlocks by itself once you've paid, so there's no code to enter</li>
+      </ul>
+      <button id="pay" type="button" disabled>Get lifetime access</button>
+      <div class="msg" id="msg" role="status"></div>
+      <small>Payments are handled by Razorpay. <a href="/refund">Refunds</a> · <a href="/terms">Terms</a> · <a href="/privacy">Privacy</a></small>
+    </div>
+    <div id="done" hidden class="ok">
+      <h1>You're all set</h1>
+      <p>Thanks! Go back to OptHelper. It unlocks by itself in a few seconds. Razorpay has emailed your receipt, so keep it if you ever move to another Mac.</p>
+    </div>
+  </main>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script>
+    (function () {
+      var device = new URLSearchParams(location.search).get('d') || '';
+      var pay = document.getElementById('pay'), msg = document.getElementById('msg'), price = document.getElementById('price');
+      function say(t, bad) { msg.textContent = t || ''; msg.className = 'msg' + (bad ? ' err' : ''); }
+      function post(path, body) {
+        return fetch('/api/license/' + path, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) })
+          .then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error(j.error || 'Something went wrong.'); return j; }); });
+      }
+      if (!/^[A-Za-z0-9-]{16,64}$/.test(device)) {
+        say('Open this page from the Get lifetime access button inside OptHelper.', true);
+        return;
+      }
+      var order;
+      function prepare() {
+        pay.disabled = true; say('');
+        return post('checkout', { device: device }).then(function (o) {
+          order = o;
+          price.textContent = (o.currency === 'INR' ? '₹' : '$') + (o.amount / 100).toFixed(o.currency === 'INR' ? 0 : 2);
+          pay.disabled = false;
+        }).catch(function (e) { say(e.message, true); });
+      }
+      pay.addEventListener('click', function () {
+        if (!order) return;
+        var rz = new Razorpay({
+          key: order.keyId, order_id: order.orderId, amount: order.amount, currency: order.currency,
+          name: 'OptHelper', description: 'Lifetime access for one Mac',
+          theme: { color: '#c4502f' },
+          handler: function (r) {
+            pay.disabled = true; say('Confirming your payment…');
+            post('verify', { order_id: r.razorpay_order_id, payment_id: r.razorpay_payment_id, signature: r.razorpay_signature })
+              .then(function () { document.getElementById('buy').hidden = true; document.getElementById('done').hidden = false; })
+              .catch(function () { say("Your payment went through, but we couldn't confirm it yet. OptHelper will unlock in a minute. If it doesn't, contact support with your receipt.", true); });
+          },
+          modal: { ondismiss: function () { say(''); } }
+        });
+        rz.on('payment.failed', function (e) { say((e.error && e.error.description) || 'Payment failed. Try again.', true); });
+        rz.open();
+      });
+      prepare();
+    })();
+  </script>
+</body>
+</html>
